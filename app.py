@@ -21,16 +21,16 @@ import configparser
 
 app = Flask(__name__)
 
-config = configparser.ConfigParser()
+""" config = configparser.ConfigParser()
 config.read('config.ini')
 
 line_bot_api = LineBotApi(config.get('line-bot', 'channel_access_token'))
-handler = WebhookHandler(config.get('line-bot', 'channel_secret'))
+handler = WebhookHandler(config.get('line-bot', 'channel_secret')) """
 
 
-""" static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
+static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
-handler = WebhookHandler(os.getenv('CHANNEL_SECRET')) """
+handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
 
 # 監聽所有來自 /callback 的 Post Request
