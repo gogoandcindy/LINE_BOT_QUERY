@@ -17,15 +17,20 @@ import datetime
 import openai
 import time
 # ======python的函數庫==========
+import configparser
 
 app = Flask(__name__)
-static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
-# Channel Access Token
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+line_bot_api = LineBotApi(config.get('line-bot', 'channel_access_token'))
+handler = WebhookHandler(config.get('line-bot', 'channel_secret'))
+
+
+""" static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
-# Channel Secret
-handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
-# OPENAI API Key初始化設定
-openai.api_key = os.getenv('OPENAI_API_KEY')
+handler = WebhookHandler(os.getenv('CHANNEL_SECRET')) """
 
 
 # 監聽所有來自 /callback 的 Post Request
@@ -49,10 +54,24 @@ def callback():
 def handle_message(event):
     msg = event.message.text
     line_bot_api.reply_message(event.reply_token, TextSendMessage(msg))
-    driver = webdriver.Chrome('chromedriver.exe')
+    # 创建一个 Chrome 浏览器实例
+    driver = webdriver.Chrome()
+
+    # 打开网页
+    driver.get("https://sys.leadyoung.com.tw/assets/Home/LINE_BOT_TEST?ID="+msg)
+
+    # 等待 JS 加载完成
+    driver.implicitly_wait(10)
+
+    # 获取网页内容
+    content = driver.page_source
+
+    # 关闭浏览器
+    driver.quit()
+    """ driver = webdriver.Chrome('./chromedriver.exe')
     driver.get(
         'https://sys.leadyoung.com.tw/assets/Home/LINE_BOT_TEST?ID='+msg)
-    time.sleep(10)
+    time.sleep(10) """
 
 
 if __name__ == "__main__":
