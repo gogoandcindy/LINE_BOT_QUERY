@@ -49,7 +49,7 @@ def callback():
 def handle_message(event):
     msg = event.message.text
     line_bot_api.reply_message(event.reply_token, TextSendMessage(msg))
-    driver = webdriver.Chrome('./chromedriver.exe')
+    driver = webdriver.Chrome('chromedriver.exe')
     driver.get(
         'https://sys.leadyoung.com.tw/assets/Home/LINE_BOT_TEST?ID='+msg)
     time.sleep(10)
