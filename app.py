@@ -8,6 +8,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import *
+from selenium import webdriver
 
 # ======python的函數庫==========
 import tempfile
@@ -47,6 +48,10 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     msg = event.message.text
+    driver = webdriver.Chrome('./chromedriver.exe')
+    driver.get(
+        'https://sys.leadyoung.com.tw/assets/Home/LINE_BOT_TEST?ID='+msg)
+    time.sleep(10)
     line_bot_api.reply_message(event.reply_token, TextSendMessage(msg))
 
 
