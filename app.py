@@ -53,31 +53,29 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     msg = event.message.text
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(msg))
-    # 创建一个 HTMLSession 实例
-    url = 'https://sys.leadyoung.com.tw/assets/Home/LINE_BOT_TEST?ID='+msg
-
-    # 發送GET請求
-    response = requests.get(url)
-
-    # 解析HTML內容
-    soup = BeautifulSoup(response.text, 'html.parser')
-    time.sleep(5000)
-    """ # 找到所有的超連結
-    links = soup.find_all(
-        'div', class_="dd", limit=1)
-
-    # 輸出每個超連結的文字和URL
-    for link in links:
-        print(link.text) """
+    """ line_bot_api.reply_message(event.reply_token, TextSendMessage(msg)) """
+    if msg.find('查詢未完成工單') != -1:
+        url = 'https://sys.leadyoung.com.tw/assets/Home/LINE_BOT_TEST?ID='+msg
+        # 發送GET請求
+        response = requests.get(url)
+        # 解析HTML內容
+        soup = BeautifulSoup(response.text, 'html.parser')
+        time.sleep(5)
+    elif msg.find('ASK GPT') != -1:
+        GPT_answer = GPT_response(msg)
+        print(GPT_answer)
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(GPT_answer))
 
 
-# 等待 JS 加载完成
-""" response.html.render() """
-""" driver = webdriver.Chrome('./chromedriver.exe')
-    driver.get(
-        'https://sys.leadyoung.com.tw/assets/Home/LINE_BOT_TEST?ID='+msg)
-    time.sleep(10) """
+def GPT_response(text):
+    # 接收回應
+    response = openai.Completion.create(
+        model="text-davinci-003", prompt=text, temperature=0.5, max_tokens=500)
+    print(response)
+    # 重組回應
+    answer = response['choices'][0]['text'].replace('。', '')
+    return answer
 
 
 if __name__ == "__main__":
