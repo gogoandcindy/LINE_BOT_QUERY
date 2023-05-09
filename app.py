@@ -20,7 +20,6 @@ import time
 from bs4 import BeautifulSoup
 # ======python的函數庫==========
 import configparser
-from requests_html import HTMLSession
 app = Flask(__name__)
 
 config = configparser.ConfigParser()
