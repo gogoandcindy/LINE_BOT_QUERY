@@ -25,8 +25,8 @@ app = Flask(__name__)
 config.read('config.ini')
 
 line_bot_api = LineBotApi(config.get('line-bot', 'channel_access_token'))
-handler = WebhookHandler(config.get('line-bot', 'channel_secret'))
- """
+handler = WebhookHandler(config.get('line-bot', 'channel_secret')) """
+
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
@@ -53,17 +53,10 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     msg = event.message.text
-    """ line_bot_api.reply_message(event.reply_token, TextSendMessage(msg)) """
-    if msg.find('查詢未完成工單') != -1:
-        url = 'https://sys.leadyoung.com.tw/assets/Home/LINE_BOT_TEST?ID='+msg
-        # 發送GET請求
-        response = requests.get(url)
-        # 解析HTML內容
-        soup = BeautifulSoup(response.text, 'html.parser')
-        time.sleep(5)
-    elif msg.find('ASK GPT') != -1:
+    if msg.find('ASK GPT') != -1:
         GPT_answer = GPT_response(msg)
         url = 'https://notify-api.line.me/api/notify'
+
         access_token = 'CLmbeXuypdFdhyc4SC3z8VCflMT9N2XoNhxUqBUbg0c'
 
         # 設置請求標頭
