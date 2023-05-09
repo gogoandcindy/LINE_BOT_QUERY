@@ -63,9 +63,17 @@ def handle_message(event):
         time.sleep(5)
     elif msg.find('ASK GPT') != -1:
         GPT_answer = GPT_response(msg)
-        print(GPT_answer)
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(GPT_answer))
+        url = 'https://notify-api.line.me/api/notify'
+        access_token = 'CLmbeXuypdFdhyc4SC3z8VCflMT9N2XoNhxUqBUbg0c'
+
+        # 設置請求標頭
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Bearer ' + access_token
+        }
+        # 發出 HTTP POST 請求
+        response = requests.post(url, headers=headers,
+                                 data={'message': GPT_answer})
 
 
 def GPT_response(text):
